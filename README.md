@@ -2,8 +2,6 @@
 
 Este repositório contém os materiais referentes às disciplinas do curso de Análise e Desenvolvimento de Sistemas (ADS). Os arquivos são organizados com o intuito de proporcionar fácil acesso aos conteúdos relacionados ao desenvolvimento acadêmico. 
 
-A pasta **"ads"** contém:
-
 - **Aulas**: Arquivos com os tópicos abordados nas diferentes disciplinas ao longo do curso.
 - **Exercícios e Atividades**: Exercícios práticos, atividades de classe e desafios realizados em cada módulo.
 - **Projetos**: Códigos fonte e protótipos de projetos desenvolvidos ao longo do curso, incluindo os relacionados a disciplinas específicas.
