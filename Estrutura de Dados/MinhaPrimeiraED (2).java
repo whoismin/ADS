@@ -55,7 +55,7 @@ public class MinhaPrimeiraED {
         return objetos[posicao]; 
     }
     public int tamanho() {
-        return totalDeObjetos; // Retorna o total de objetos
+        return objetos.length; // Retorna o total de objetos
     }
 
     // Verifica se o vetor está cheio
