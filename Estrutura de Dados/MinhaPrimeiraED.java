@@ -1,123 +1,163 @@
 public class MinhaPrimeiraED {
-    private Object[] objetos = new Object[10];
-    public int totalDeObjetos = 0; 
 
-    public void adiciona(int posicao, Object objeto) { // Add um objeto em uma posição específica
-        if (posicao < 0 || posicao > totalDeObjetos) {
-            throw new IndexOutOfBoundsException("Posição inválida");
-        }
-        if (cheio()) {
-            aumentaCapacidade(); // Aumenta a capacidade se o vetor estiver cheio
-        }
-        for (int i = totalDeObjetos; i > posicao; i--) {
-            objetos[i] = objetos[i - 1];
-        }
-        objetos[posicao] = objeto; // Add o novo objeto na posição especificada
-        totalDeObjetos++;
-    }
-    // Add um objeto ao final do vetor
-    public void adiciona(Object objeto) {
-        if (cheio()) {
-            aumentaCapacidade(); // Aumenta a capacidade se o vetor estiver cheio
-        }
-        objetos[totalDeObjetos] = objeto; // Add o objeto no final
-        totalDeObjetos++;
-    }
-    private boolean posicaoOcupada(int posicao) {     // Verifica se a posição está ocupada
+    private Object[] elementos; // Array para armazenar os elementos
+    private int tamanho; // Número atual de elementos na estrutura
 
-        return posicao >= 0 && posicao < totalDeObjetos && objetos[posicao] != null;
+    // Construtor que inicializa a estrutura com um array de tamanho 10
+    public MinhaPrimeiraED() {
+        this.elementos = new Object[10];
+        this.tamanho = 0;
     }
-    private boolean posicaoValida(int posicao) {
-        return posicao >= 0 && posicao < totalDeObjetos;
-    }
-    public void remove(int posicao) { // Remove um objeto de uma posição específica
+
+    /**
+     * Adiciona um objeto em uma posição específica do vetor.
+     * Se a posição estiver ocupada, desloca os elementos à direita.
+     * 
+     * @param posicao A posição onde o objeto deve ser adicionado.
+     * @param objeto O objeto a ser adicionado.
+     * @throws IndexOutOfBoundsException Se a posição não for válida.
+     */
+    public void adiciona(int posicao, Object objeto) {
         if (!posicaoValida(posicao)) {
-            throw new IndexOutOfBoundsException("Posição inválida");
+            throw new IndexOutOfBoundsException("Índice inválido: " + posicao);
         }
-        for (int i = posicao; i < totalDeObjetos - 1; i++) {
-            objetos[i] = objetos[i + 1];
+        if (tamanho == elementos.length) {
+            expandirCapacidade(); // Expande a capacidade se o vetor estiver cheio
         }
-        objetos[totalDeObjetos - 1] = null; // Limpa a última posição
-        totalDeObjetos--;
+        // Desloca os elementos para a direita
+        System.arraycopy(elementos, posicao, elementos, posicao + 1, tamanho - posicao);
+        elementos[posicao] = objeto; // Adiciona o novo objeto
+        tamanho++; // Incrementa o tamanho
     }
+
+    /**
+     * Adiciona um objeto ao final do vetor.
+     * 
+     * @param objeto O objeto a ser adicionado.
+     */
+    public void adiciona(Object objeto) {
+        if (tamanho == elementos.length) {
+            expandirCapacidade(); // Expande a capacidade se o vetor estiver cheio
+        }
+        elementos[tamanho++] = objeto; // Adiciona o objeto e incrementa o tamanho
+    }
+
+    /**
+     * Verifica se uma posição específica está ocupada.
+     * 
+     * @param posicao A posição a ser verificada.
+     * @return true se a posição estiver ocupada, false caso contrário.
+     */
+    private boolean posicaoOcupada(int posicao) {
+        return posicao >= 0 && posicao < tamanho && elementos[posicao] != null;
+    }
+
+    /**
+     * Verifica se uma posição é válida para adição de elementos.
+     * 
+     * @param posicao A posição a ser verificada.
+     * @return true se a posição for válida, false caso contrário.
+     */
+    private boolean posicaoValida(int posicao) {
+        return posicao >= 0 && posicao <= tamanho; // Permite adicionar no final
+    }
+
+    /**
+     * Remove um objeto de uma posição específica do vetor.
+     * Desloca os elementos à esquerda para preencher o espaço.
+     * 
+     * @param posicao A posição do objeto a ser removido.
+     * @throws IndexOutOfBoundsException Se a posição não for válida ou não estiver ocupada.
+     */
+    public void remove(int posicao) {
+        if (!posicaoValida(posicao) || !posicaoOcupada(posicao)) {
+            throw new IndexOutOfBoundsException("Índice inválido: " + posicao);
+        }
+        // Desloca os elementos para a esquerda
+        System.arraycopy(elementos, posicao + 1, elementos, posicao, tamanho - posicao - 1);
+        elementos[--tamanho] = null; // Limpa a última posição
+    }
+
+    /**
+     * Verifica se um objeto está presente na estrutura.
+     * 
+     * @param objeto O objeto a ser pesquisado.
+     * @return true se o objeto for encontrado, false caso contrário.
+     */
     public boolean contem(Object objeto) {
-        for (int i = 0; i < totalDeObjetos; i++) {
-            if (objetos[i].equals(objeto)) {
-                return true; 
+        for (int i = 0; i < tamanho; i++) {
+            if ((elementos[i] == null && objeto == null) || (elementos[i] != null && elementos[i].equals(objeto))) {
+                return true; // Objeto encontrado
             }
         }
-        return false; 
+        return false; // Objeto não encontrado
     }
+
+    /**
+     * Retorna o objeto em uma posição específica.
+     * 
+     * @param posicao A posição do objeto a ser retornado.
+     * @return O objeto na posição especificada.
+     * @throws IndexOutOfBoundsException Se a posição não estiver ocupada.
+     */
     public Object getObjeto(int posicao) {
-        if (!posicaoValida(posicao)) {
-            throw new IndexOutOfBoundsException("Posição inválida");
+        if (!posicaoOcupada(posicao)) {
+            throw new IndexOutOfBoundsException("Índice inválido: " + posicao);
         }
-        return objetos[posicao]; 
-    }
+        return elementos[posicao]; // Retorna o objeto na posição
+}
+        
+            /**
+     * Retorna o tamanho atual da estrutura.
+     * 
+     * @return O número de elementos na estrutura.
+     */
     public int tamanho() {
-        return objetos.length; // Retorna o total de objetos
+        return tamanho;
     }
 
-    // Verifica se o vetor está cheio
-    public boolean cheio() {
-        return totalDeObjetos == objetos.length; // true se o vetor estiver cheio
+    /**
+     * Expande a capacidade do vetor para acomodar mais elementos.
+     */
+    private void expandirCapacidade() {
+        Object[] novoArray = new Object[elementos.length * 2];
+        System.arraycopy(elementos, 0, novoArray, 0, elementos.length);
+        elementos = novoArray;
     }
 
-    // Verifica se o vetor está vazio
-    public boolean vazio() {
-        return totalDeObjetos == 0; // true se o vetor estiver vazio
-    }
-
-    // Aumenta a capacidade do vetor
-    private void aumentaCapacidade() {
-        Object[] novoArray = new Object[objetos.length * 2];
-        for (int i = 0; i < objetos.length; i++) {
-            novoArray[i] = objetos[i]; 
+    /**
+     * Exibe o conteúdo da estrutura.
+     */
+    public void exibirLista() {
+        System.out.println("Conteúdo da estrutura:");
+        for (int i = 0; i < tamanho; i++) {
+            System.out.println("Posição " + i + ": " + elementos[i]);
         }
-        objetos = novoArray; 
     }
 
     public static void main(String[] args) {
-        MinhaPrimeiraED minhaED = new MinhaPrimeiraED();
+        MinhaPrimeiraED lista = new MinhaPrimeiraED();
+        lista.adiciona("Objeto A");
+        lista.adiciona("Objeto B");
+        lista.adiciona("Objeto C");
+        lista.exibirLista();
 
-        minhaED.adiciona(0, "Objeto 1");
-        minhaED.adiciona(1, "Objeto 2");
-        minhaED.adiciona(0, "Objeto 3");
+        lista.adiciona(1, "Objeto D");
+        lista.exibirLista();
 
-        // Testando o método adiciona
-        minhaED.adiciona("Objeto 4");
+        System.out.println("A lista contém 'Objeto B'? " + lista.contem("Objeto B"));
+        System.out.println("A lista contém 'Objeto F'? " + lista.contem("Objeto F"));
 
-        minhaED.remove(1); // Remove o objeto na posição 1
+        lista.remove(2); // Remove um objeto da lista
+        lista.exibirLista();
 
-        System.out.println("Contém 'Objeto 1'? " + minhaED.contem("Objeto 1")); 
-        System.out.println("Contém 'Objeto 2'? " + minhaED.contem("Objeto 2")); 
+        System.out.println("Elemento na posição 1: " + lista.getObjeto(1));
+        System.out.println("Tamanho da lista: " + lista.tamanho());
 
-        System.out.println("Objeto na posição 0: " + minhaED.getObjeto(0)); 
-
-        System.out.println("Tamanho da estrutura de dados: " + minhaED.tamanho()); 
-
-        System.out.println("Estrutura de dados cheia? " + minhaED.cheio()); 
-
-        System.out.println("Estrutura de dados vazia? " + minhaED.vazio()); 
-
-        // Add mais objetos para testar o aumento de capacidade
-        minhaED.adiciona("Objeto 5");
-        minhaED.adiciona("Objeto 6");
-        minhaED.adiciona("Objeto 7");
-        minhaED.adiciona("Objeto 8");
-        minhaED.adiciona("Objeto 9");
-        minhaED.adiciona("Objeto 10");
-        minhaED.adiciona("Objeto 11"); 
-
-        // Verifica o tamanho após adicionar mais objetos
-        System.out.println("Tamanho da estrutura de dados após adições: " + minhaED.tamanho()); // Deve retornar 10
-
-        // Verifica se a estrutura está cheia após as adições
-        System.out.println("Estrutura de dados cheia após adições? " + minhaED.cheio()); // Deve retornar true
-
-        // Testando a recuperação de objetos
-        for (int i = 0; i < minhaED.tamanho(); i++) {
-            System.out.println("Objeto na posição " + i + ": " + minhaED.getObjeto(i));
+        for (int i = 0; i < 15; i++) {
+            lista.adiciona(i + 1);
         }
+        lista.exibirLista();
+        System.out.println("Novo tamanho da estrutura: " + lista.elementos.length);
     }
 }
