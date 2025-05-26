@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      background-color: #ebeae0;
+      margin: 0;
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #ffffff !important;
+    }
+
+    .container-box {
+      max-width: 1200px;
+      margin: auto;
+      background-color: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .table thead {
+      background-color: #f8c8dc;
+    }
+
+    .btn-custom {
+      background-color: #0456a3;
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-custom:hover {
+      background-color: #6592bd;
+    }
+
+    .btn-danger {
+      background-color: #6d020d;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background-color: #530008;
+    }
+    .modal-content {
+      border-radius: 15px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+      border: none;
+    }
+    .modal-header {
+      background-color: #5f0101;
+      color: white;
+      border-bottom: none;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    .modal-footer {
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg fixed-top" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">SISTEMA WEB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="/">Cadastrar</a>
+          <a class="nav-link active" href="/consulta">Consultar</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container-box mt-5">
+    <h2>Agendamentos</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center align-middle">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Origem</th>
+            <th>Data de Contato</th>
+            <th>Observação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each post}}
+          <tr>
+            <td>{{nome}}</td>
+            <td>{{telefone}}</td>
+            <td>{{origem}}</td>
+            <td>{{data_contato}}</td>
+            <td>{{observacao}}</td>
+            <td>
+              <a href="/editar/{{id}}" class="btn btn-custom btn-sm me-2">Editar</a>
+              <button class="btn btn-danger btn-sm btn-excluir" data-id="{{id}}">Excluir</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de exclusão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja excluir este agendamento?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let idParaExcluir = null;
+
+    const botoesExcluir = document.querySelectorAll('.btn-excluir');
+
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+
+    botoesExcluir.forEach(btn => {
+      btn.addEventListener('click', () => {
+        idParaExcluir = btn.getAttribute('data-id');
+        confirmModal.show();
+      });
+    });
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+      if(idParaExcluir) {
+        window.location.href = `/excluir/${idParaExcluir}`;
+      }
+    });
+  </script>
+
+</body>
+</html>

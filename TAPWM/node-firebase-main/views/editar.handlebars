@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editar Cadastro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #ebeae0;
+      margin: 0;
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #ffffff !important;
+    }
+
+    .container-box {
+      max-width: 1000px;
+      margin: auto;
+      background-color: white;
+      display: flex;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .left {
+      flex: 1;
+      background-color: #529ebd;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .left h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .left p {
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .right {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .form-control {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      border-radius: 0;
+      background-color: transparent;
+    }
+
+    .form-control:focus {
+      border-color: #c8e9f8;
+      box-shadow: none;
+    }
+
+    .btn-custom {
+      background-color: #064150;
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-custom:hover {
+      background-color: #7db7e7;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">SISTEMA WEB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="/">Cadastrar</a>
+          <a class="nav-link" href="/consulta">Consultar</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container-box mt-5">
+    <div class="left">
+      <h2>Editar Cadastro</h2>
+      <p>Atualize os dados ao lado e clique em atualizar para salvar as alterações.</p>
+    </div>
+    <div class="right">
+      <h3>Editar Cliente</h3>
+      <form action="/atualizar" method="POST">
+        <input type="hidden" name="id" value="{{dados.id}}" />
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" name="nome" class="form-control" value="{{dados.nome}}" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Telefone</label>
+          <input type="tel" name="telefone" class="form-control" value="{{dados.telefone}}" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Origem</label>
+          <select name="origem" class="form-select">
+            <option value="celular" {{#if (eq dados.origem "celular")}}selected{{/if}}>Celular</option>
+            <option value="whatsapp" {{#if (eq dados.origem "whatsapp")}}selected{{/if}}>Whatsapp</option>
+            <option value="telefone_fixo" {{#if (eq dados.origem "telefone_fixo")}}selected{{/if}}>Telefone Fixo</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Data do Contato</label>
+          <input type="date" name="data_contato" class="form-control" value="{{dados.data_contato}}" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Observação</label>
+          <textarea name="observacao" class="form-control" rows="3">{{dados.observacao}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-custom">Atualizar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
